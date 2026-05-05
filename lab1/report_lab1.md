@@ -27,7 +27,7 @@ Date of create: 05.05.2026
 
 <img width="903" height="701" alt="Screenshot_4" src="https://github.com/user-attachments/assets/b07b7a1f-1f2d-4908-9b01-eaccd8c2d79b" />
 
-- Изменил права на Compute Viewer. 
+- Изменил права на Compute Viewer. После смены роли с Storage Admin на Compute Viewer service account потерял права на чтение объектов.
 <img width="586" height="536" alt="Screenshot_5" src="https://github.com/user-attachments/assets/d5c3966f-d722-4b23-a7de-c5ee20240974" />
 
 - Удалил все созданные сервисы.
