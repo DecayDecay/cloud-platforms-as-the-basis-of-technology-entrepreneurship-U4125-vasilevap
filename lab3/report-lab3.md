@@ -1,3 +1,20 @@
+University: ITMO University (https://itmo.ru/ru/) Faculty: FTMI
+
+Course: Cloud Platforms as the basis of technology entrepreneurship Year: 2025/2026
+
+Group: U4125
+
+Author: Vasilev Anton
+
+Lab: Lab1
+
+Date of create: 05.05.2026
+
+# Лабораторная работа №3
+# Исследование Cloud Storage
+
+
+
 <img width="1973" height="1190" alt="Screenshot_6" src="https://github.com/user-attachments/assets/343ec097-2632-49c6-8e37-2b6f6cbbc402" />
 
 
