@@ -1,3 +1,13 @@
+University: ITMO University (https://itmo.ru/ru/) Faculty: FTMI
+Course: Cloud Platforms as the basis of technology entrepreneurship Year: 2025/2026
+Group: U4125
+Author: Vasilev Anton
+Lab: Lab1
+Date of create: 05.05.2026
+
+Лабораторная работа №1
+Обзор Google Cloud и исследование основных сервисов
+
 <img width="1962" height="132" alt="Screenshot_1" src="https://github.com/user-attachments/assets/781afc30-0b49-4970-8c66-539fa62186d7" />
 <img width="1353" height="1172" alt="Screenshot_2" src="https://github.com/user-attachments/assets/811621cd-880a-4c05-a8d8-a40c300dfbfd" />
 <img width="1347" height="234" alt="Screenshot_3" src="https://github.com/user-attachments/assets/6e182ec2-23a5-4a72-a869-7647ff3918f1" />
