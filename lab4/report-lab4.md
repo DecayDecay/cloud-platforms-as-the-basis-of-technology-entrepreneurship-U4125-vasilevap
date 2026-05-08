@@ -51,16 +51,9 @@ Cloud Storage: полные тексты промптов и ответов в J
 
 
 
-Цель: SLA 99.9%, горизонтальное масштабирование, защита от DDoS, контроль расходов на LLM.
-Стратегия: GKE Autopilot вместо Cloud Run (нужен ручной контроль pod-ов и GPU-узлов), Cloud Armor для защиты, Cloud SQL HA с Read Replica, BigQuery для аналитики и обучения. Главное архитектурное решение — собственная локальная LLM (Llama на GPU) для типовых запросов, OpenRouter остаётся только для сложных задач. Это резко снижает расходы на LLM при больших объёмах.
-Инфраструктура:
-РесурсКонфигурацияОбоснованиеGKE Autopilot ClusterАвтоскейлинг pod-ов, GPU-узлыОркестрация при пиковых нагрузкахFrontend podsНесколько репликКабинет, лентаBackend API podsНесколько репликAuth, платежи, оркестрация LLMLocal LLM podsGPU-узлы (T4 или L4)Своя Llama для типовых запросовSupport podsНесколько репликТикеты, рейтингиCloud SQL HA + Read Replican1-standard-4, primary + репликаFailover, разгрузка primaryCloud Storage1 TB, мультирегионФото, веса LLM, гео-репликацияCloud CDNГлобальныйКэширование по мируGlobal HTTPS LBС SSL terminationБалансировка трафикаCloud ArmorManaged AdvancedDDoS и WAFBigQuery + LookerStandardАналитика, дообучение моделейMonitoring PremiumПолный observabilityЛоги, трейсы, алерты на бюджет LLMOpenRouter APIВнешнийТолько сложные запросы (20-30%)
-Распределение LLM-нагрузки:
-
 70-80% типовых запросов (популярные блюда, простые рекомендации) обрабатывает локальная Llama в кластере
 20-30% сложных запросов идут в OpenRouter
 Это снижает расходы на LLM в десятки раз по сравнению с чистым OpenRouter
-
 
 Обоснование ключевых решений
 Cloud Run на стадиях 1-2 выбран за serverless-модель: оплата по факту, автомасштабирование, минимум DevOps-работы.
