@@ -1,4 +1,6 @@
-University: ITMO University (https://itmo.ru/ru/) Faculty: FTMI
+University: ITMO University (https://itmo.ru/ru/) 
+
+Faculty: FTMI
 
 Course: Cloud Platforms as the basis of technology entrepreneurship Year: 2025/2026
 
