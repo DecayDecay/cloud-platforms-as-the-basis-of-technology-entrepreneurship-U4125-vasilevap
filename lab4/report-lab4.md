@@ -1,3 +1,17 @@
+University: ITMO University (https://itmo.ru/ru/) Faculty: FTMI
+
+Course: Cloud Platforms as the basis of technology entrepreneurship Year: 2025/2026
+
+Group: U4125
+
+Author: Vasilev Anton
+
+Lab: Lab1
+
+Date of create: 05.05.2026
+
+
+
 # Лабораторная работа №4. Разработка инфраструктуры MVP AI приложения
 
 Стадия 1 (MVP): до 100 пользователей
@@ -5,37 +19,30 @@
 Стадия 3 (продакшн): до 1 000 000 пользователей в час
 
 
-Стадия 1. MVP, до 100 пользователей
+# Стадия 1. MVP, до 100 пользователей
 <img width="1139" height="403" alt="image" src="https://github.com/user-attachments/assets/27484ba3-5749-45cb-a549-b126771a9c44" />
 
 
 Цель: запустить рабочий прототип, проверить продуктовую гипотезу.
 Стратегия: монолит на Cloud Run, минимальная БД, прямые вызовы OpenRouter из backend без кэша и оркестратора.
-Инфраструктура:
-РесурсКонфигурацияОбоснованиеCloud Run (frontend + backend)1 vCPU, 512 MB, serverlessFree tier покрывает 2M запросов в месяцCloud SQL Postgresdb-f1-micro, 1 GB SSDМинимальная управляемая БДCloud Storage10 GBФото блюд, JSON-логи диалогов с LLMCloud DNS1 зонаРезолвинг доменаCloud MonitoringБесплатный tierБазовые метрикиOpenRouter APIВнешний, оплата по токенамLLM для распознавания и рекомендаций
-Экономика:
-РесурсUSD/месCloud Run0 (free tier)Cloud SQL db-f1-micro9Cloud Storage 10 GB0,23Cloud DNS0,50Домен1Cloud Monitoring0OpenRouter (на 100 пользователей)10-30Итогооколо 21-41 USD/мес
 
-
-
-Стадия 2. Партнёры, до 5 000 пользователей
+# Стадия 2. Партнёры, до 5 000 пользователей
 
 <img width="1301" height="684" alt="image" src="https://github.com/user-attachments/assets/e033b03e-87b3-4319-94bb-63a3c9d33287" />
 
 Цель: подключить партнёров, проверить нагрузку, начать собирать датасет.
 Стратегия: разделение на frontend и backend как отдельные Cloud Run сервисы, добавление CDN и Load Balancer. LLM-логика остаётся внутри backend, никаких отдельных AI-сервисов и Pub/Sub. Это сознательное упрощение — отдельные оркестраторы и gateway появляются только когда они реально нужны (на стадии 3).
-Инфраструктура:
-РесурсКонфигурацияОбоснованиеCloud Run frontendдо 4 vCPU, автоскейлингКабинет, лента, формыCloud Run backendдо 4 vCPU, автоскейлингAPI, бизнес-логика, вызовы OpenRouterCloud SQL Postgresdb-n1-standard-1, 50 GBБольше транзакций, выделенный CPUCloud Storage100 GBФото блюд + JSON-логи LLMCloud CDNНа LBУскорение отдачи статики и фотоCloud Load BalancingHTTPSМаршрутизация и SSLCloud Monitoring + AlertingОсновной tierАлерты для партнёровOpenRouter APIВнешнийLLM-вызовы из backend
-Где хранятся LLM-данные:
 
+Где хранятся LLM-данные:
 Cloud SQL: метаданные вызовов (user_id, модель, токены, цена, ссылка на лог)
 Cloud Storage: полные тексты промптов и ответов в JSON
 Это разделение нужно потому, что хранить большие тексты в SQL дорого и медленно.
 
 Экономика:
-РесурсUSD/месCloud Run (2 сервиса)20Cloud SQL n1-standard-150Cloud Storage 100 GB2,30Cloud CDN (500 GB)10Cloud Load Balancing20Cloud Monitoring10OpenRouter (5000 пользователей)100-300Итогооколо 212-412 USD/мес
+РесурсUSD/месCloud Run (2 сервиса)
+20Cloud SQL n1-standard-150Cloud Storage 100 GB2,30Cloud CDN (500 GB)10Cloud Load Balancing20Cloud Monitoring10OpenRouter (5000 пользователей)100-300Итогооколо 212-412 USD/мес
 
-Стадия 3. Продакшн, до 1 000 000 пользователей в час
+# Стадия 3. Продакшн, до 1 000 000 пользователей в час
 <img width="1452" height="729" alt="image" src="https://github.com/user-attachments/assets/5fab466e-0466-4b68-b0e6-cc5b18730614" />
 
 
@@ -50,19 +57,10 @@ Cloud Storage: полные тексты промптов и ответов в J
 20-30% сложных запросов идут в OpenRouter
 Это снижает расходы на LLM в десятки раз по сравнению с чистым OpenRouter
 
-Экономика:
-РесурсUSD/месGKE Autopilot (5 узлов n2-standard-4)600GKE GPU-узлы для локальной LLM400Cloud SQL HA + Replica400Cloud Storage 1 TB MR26Cloud CDN (5 TB)85Cloud Load Balancing30Cloud Armor Advanced200Monitoring Premium50BigQuery + Looker100OpenRouter (20-30% запросов)2000-5000Итогооколо 3 900-6 900 USD/мес
-
-Сравнительная таблица
-ПараметрСтадия 1Стадия 2Стадия 3Пользователейдо 100до 5 000до 1 млн/часАрхитектураМонолит на Cloud Run2 сервиса на Cloud RunGKE с pod-амиБаза данныхf1-micron1-standard-1HA + Read ReplicaLLMOpenRouter напрямуюOpenRouter из backendLocal Llama + OpenRouterЗащитанетнетCloud ArmorCDNнетдада, глобальныйBIнетв backendBigQuery + LookerSLAbest effortоколо 99,5%99,9%Стоимость инфраструктурыоколо 11 USDоколо 112 USDоколо 1 900 USDСтоимость LLM10-30 USD100-300 USD2000-5000 USDИтого/мес21-41 USD212-412 USD3 900-6 900 USD
 
 Обоснование ключевых решений
 Cloud Run на стадиях 1-2 выбран за serverless-модель: оплата по факту, автомасштабирование, минимум DevOps-работы.
 GKE Autopilot на стадии 3 заменяет Cloud Run, потому что:
-
-Нужны GPU-узлы для локальной LLM (Cloud Run не поддерживает)
-Нужен тонкий контроль над pod affinity и resource limits
-Нужен полный контроль над версионированием моделей
 
 OpenRouter вместо прямых интеграций даёт гибкость переключения между моделями и единый биллинг. На стадиях 1-2 это единственный источник LLM. На стадии 3 — резервный канал для сложных запросов.
 Локальная LLM на стадии 3 обязательна с точки зрения экономики. При миллионе пользователей в час чистый OpenRouter стоил бы десятки тысяч долларов. Своя Llama на GPU окупается при таком объёме за пару месяцев.
